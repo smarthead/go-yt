@@ -112,9 +112,10 @@ func (client *Client) Fetch(resourceUrl string, requestParams *RequestOptions, r
 	return nil
 }
 
-func (client *Client) Get(resourceUrl string, headers map[string]string, result interface{}) error {
+func (client *Client) Get(resourceUrl string, query map[string]string, headers map[string]string, result interface{}) error {
 	return client.Fetch(resourceUrl, &RequestOptions{
 		HttpMethod: "GET",
+		Query:      query,
 		Headers:    headers,
 		Body:       nil,
 	}, result)
