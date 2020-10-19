@@ -1,8 +1,8 @@
 package issues
 
 import (
-	"go-yt/rest"
-	"go-yt/utils"
+	"github.com/qdimka/go-yt/rest"
+	"github.com/qdimka/go-yt/utils"
 )
 
 const (

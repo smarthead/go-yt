@@ -3,7 +3,7 @@ package rest
 import (
 	"bytes"
 	"encoding/json"
-	"go-yt/errors"
+	"github.com/qdimka/go-yt/errors"
 	"io/ioutil"
 	"log"
 	"net/http"
