@@ -27,6 +27,11 @@ type Issue struct {
 	CustomFields []CustomField `json:"customFields"`
 }
 
+type CreatedIssue struct {
+	Id   string `json:"id"`
+	Type string `json:"$type"`
+}
+
 type Service struct {
 	client *rest.Client
 }
@@ -46,11 +51,11 @@ func (s *Service) GetIssues(query string, fields ...string) (*[]Issue, error) {
 	return issues, nil
 }
 
-func (s *Service) CreateIssue(issue Issue) error {
-	err := s.client.Post("api/issues", issue, nil, nil)
-	return err
-}
+func (s *Service) CreateIssue(issue Issue) (*CreatedIssue, error) {
+	result := new(CreatedIssue)
 
-func (s *Service) Comment(i int) error {
-	panic("implement me")
+	if err := s.client.Post("api/issues", issue, nil, &result); err != nil {
+		return nil, err
+	}
+	return result, nil
 }
