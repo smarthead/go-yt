@@ -1,12 +1,14 @@
 package issues
 
 import (
+	"fmt"
 	"github.com/qdimka/go-yt/rest"
+	"github.com/qdimka/go-yt/users"
 	"github.com/qdimka/go-yt/utils"
 )
 
 const (
-	DefaultFields = "id,idReadable,summary,project(id,shortName,name),customFields(name,$type,value(name,login))"
+	DefaultFields = "id,$type,idReadable,summary,project(id,shortName,name),customFields(name,$type,value(name,login))"
 )
 
 type CustomFieldValue struct {
@@ -21,15 +23,31 @@ type CustomField struct {
 }
 
 type Issue struct {
+	Id           string        `json:"id"`
 	Summary      string        `json:"summary"`
 	Description  string        `json:"description"`
+	Type         string        `json:"$type"`
 	Project      interface{}   `json:"project"`
 	CustomFields []CustomField `json:"customFields"`
 }
 
-type CreatedIssue struct {
+type IssueResult struct {
 	Id   string `json:"id"`
 	Type string `json:"$type"`
+}
+
+type IssueComment struct {
+	Text         string        `json:"text"`
+	UsesMarkdown bool          `json:"usesMarkdown"`
+	TextPreview  string        `json:"textPreview"`
+	Created      string        `json:"created"`
+	Updated      string        `json:"updated"`
+	Author       users.User    `json:"author"`
+	Issue        Issue         `json:"issue"`
+	Attachments  []interface{} `json:"attachments"`
+	Visibility   interface{}   `json:"visibility"`
+	Deleted      bool          `json:"deleted"`
+	Type         string        `json:"$type"`
 }
 
 type Service struct {
@@ -51,11 +69,21 @@ func (s *Service) GetIssues(query string, fields ...string) (*[]Issue, error) {
 	return issues, nil
 }
 
-func (s *Service) CreateIssue(issue Issue) (*CreatedIssue, error) {
-	result := new(CreatedIssue)
+func (s *Service) CreateIssue(issue *Issue) (*IssueResult, error) {
+	result := new(IssueResult)
 
 	if err := s.client.Post("api/issues", issue, nil, &result); err != nil {
 		return nil, err
 	}
+	return result, nil
+}
+
+func (s *Service) CommentIssue(issue *Issue, comment *IssueComment) (*IssueResult, error) {
+	result := new(IssueResult)
+
+	if err := s.client.Post(fmt.Sprintf("api/issues/%s/comments", issue.Id), comment, nil, &result); err != nil {
+		return nil, err
+	}
+
 	return result, nil
 }
