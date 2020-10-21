@@ -38,16 +38,16 @@ type IssueResult struct {
 
 type IssueComment struct {
 	Text         string        `json:"text"`
-	UsesMarkdown bool          `json:"usesMarkdown"`
-	TextPreview  string        `json:"textPreview"`
-	Created      string        `json:"created"`
-	Updated      string        `json:"updated"`
-	Author       users.User    `json:"author"`
-	Issue        Issue         `json:"issue"`
-	Attachments  []interface{} `json:"attachments"`
-	Visibility   interface{}   `json:"visibility"`
-	Deleted      bool          `json:"deleted"`
-	Type         string        `json:"$type"`
+	UsesMarkdown bool          `json:"usesMarkdown,omitempty"`
+	TextPreview  string        `json:"textPreview,omitempty"`
+	Created      string        `json:"created,omitempty"`
+	Updated      string        `json:"updated,omitempty"`
+	Author       users.User    `json:"author,omitempty"`
+	Issue        Issue         `json:"issue,omitempty"`
+	Attachments  []interface{} `json:"attachments,omitempty"`
+	Visibility   interface{}   `json:"visibility,omitempty"`
+	Deleted      bool          `json:"deleted,omitempty"`
+	Type         string        `json:"$type,omitempty"`
 }
 
 type Service struct {
