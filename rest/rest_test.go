@@ -95,7 +95,7 @@ func Test_ShouldSend_Body(t *testing.T) {
 
 	expected := &TestData{Field: "Expected"}
 	actual := &TestData{}
-	err = rest.Post("/api", expected, nil, actual)
+	err = rest.Post("/api", nil, expected, nil, actual)
 
 	if err != nil {
 		t.Fatal(err)

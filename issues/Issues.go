@@ -34,7 +34,7 @@ type Issue struct {
 type IssueResult struct {
 	Id              string `json:"id"`
 	Type            string `json:"$type"`
-	NumberInProject string `json:"numberInProject"`
+	NumberInProject int    `json:"numberInProject"`
 }
 
 type IssueComment struct {
@@ -79,6 +79,7 @@ func (s *Service) CreateIssue(issue *Issue) (*IssueResult, error) {
 		issue, nil, &result); err != nil {
 		return nil, err
 	}
+
 	return result, nil
 }
 
