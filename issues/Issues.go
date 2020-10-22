@@ -23,17 +23,18 @@ type CustomField struct {
 }
 
 type Issue struct {
-	Id           string        `json:"id"`
+	Id           string        `json:"id,omitempty"`
 	Summary      string        `json:"summary"`
-	Description  string        `json:"description"`
-	Type         string        `json:"$type"`
+	Description  string        `json:"description,omitempty"`
+	Type         string        `json:"$type,omitempty"`
 	Project      interface{}   `json:"project"`
-	CustomFields []CustomField `json:"customFields"`
+	CustomFields []CustomField `json:"customFields,omitempty"`
 }
 
 type IssueResult struct {
-	Id   string `json:"id"`
-	Type string `json:"$type"`
+	Id              string `json:"id"`
+	Type            string `json:"$type"`
+	NumberInProject string `json:"numberInProject"`
 }
 
 type IssueComment struct {
@@ -60,7 +61,8 @@ func NewIssuesService(client *rest.Client) *Service {
 
 func (s *Service) GetIssues(query string, fields ...string) (*[]Issue, error) {
 	issues := new([]Issue)
-	err := s.client.Get("api/issues", utils.ConstructQuery(query, fields), nil, issues)
+	err := s.client.Get("api/issues",
+		utils.ConstructQuery(query, fields), nil, issues)
 
 	if err != nil {
 		return nil, err
@@ -72,7 +74,9 @@ func (s *Service) GetIssues(query string, fields ...string) (*[]Issue, error) {
 func (s *Service) CreateIssue(issue *Issue) (*IssueResult, error) {
 	result := new(IssueResult)
 
-	if err := s.client.Post("api/issues", issue, nil, &result); err != nil {
+	if err := s.client.Post("api/issues",
+		utils.ConstructQuery("", []string{"id", "$type", "numberInProject"}),
+		issue, nil, &result); err != nil {
 		return nil, err
 	}
 	return result, nil
@@ -81,7 +85,9 @@ func (s *Service) CreateIssue(issue *Issue) (*IssueResult, error) {
 func (s *Service) CommentIssue(issue *Issue, comment *IssueComment) (*IssueResult, error) {
 	result := new(IssueResult)
 
-	if err := s.client.Post(fmt.Sprintf("api/issues/%s/comments", issue.Id), comment, nil, &result); err != nil {
+	if err := s.client.Post(fmt.Sprintf("api/issues/%s/comments", issue.Id),
+		utils.ConstructQuery("", []string{"id", "$type", "numberInProject"}),
+		comment, nil, &result); err != nil {
 		return nil, err
 	}
 

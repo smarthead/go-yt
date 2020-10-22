@@ -121,9 +121,10 @@ func (client *Client) Get(resourceUrl string, query map[string]string, headers m
 	}, result)
 }
 
-func (client *Client) Post(resourceUrl string, request interface{}, headers map[string]string, result interface{}) error {
+func (client *Client) Post(resourceUrl string, query map[string]string, request interface{}, headers map[string]string, result interface{}) error {
 	return client.Fetch(resourceUrl, &RequestOptions{
 		HttpMethod: "POST",
+		Query:      query,
 		Headers:    headers,
 		Body:       request,
 	}, result)
