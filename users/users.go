@@ -5,9 +5,10 @@ import (
 	"github.com/qdimka/go-yt/utils"
 )
 
-const DefaultFields = "$type,avatarUrl,fullName,jabberAccountName,ringId,name,login,banned,email,guest,online,tags(id,name,issues(idReadable)),savedQueries(name,issues(idReadable))"
+const DefaultFields = "$type,id,avatarUrl,fullName,jabberAccountName,ringId,name,login,banned,email,guest,online,tags(id,name,issues(idReadable)),savedQueries(name,issues(idReadable))"
 
 type User struct {
+	Id                string        `json:"id"`
 	Login             string        `json:"login"`
 	FullName          string        `json:"fullName"`
 	Email             string        `json:"email"`
