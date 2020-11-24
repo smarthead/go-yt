@@ -3,6 +3,7 @@ package users
 import (
 	"github.com/qdimka/go-yt/rest"
 	"github.com/qdimka/go-yt/utils"
+	"strconv"
 )
 
 const DefaultFields = "$type,id,avatarUrl,fullName,jabberAccountName,ringId,name,login,banned,email,guest,online,tags(id,name,issues(idReadable)),savedQueries(name,issues(idReadable))"
@@ -32,10 +33,13 @@ func NewUsersService(client *rest.Client) *Service {
 	return &Service{client: client}
 }
 
-func (s *Service) GetUsers(fields ...string) (*[]User, error) {
+func (s *Service) GetUsers(top int, skip int, fields ...string) (*[]User, error) {
 	users := new([]User)
 
-	err := s.client.Get("api/users", utils.ConstructQuery("", fields), nil, users)
+	err := s.client.Get("api/users", utils.ConstructQuery(map[string]string{
+		"$top":  strconv.Itoa(top),
+		"$skip": strconv.Itoa(skip),
+	}, fields), nil, users)
 
 	if err != nil {
 		return nil, err

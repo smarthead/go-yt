@@ -62,7 +62,9 @@ func NewIssuesService(client *rest.Client) *Service {
 func (s *Service) GetIssues(query string, fields ...string) (*[]Issue, error) {
 	issues := new([]Issue)
 	err := s.client.Get("api/issues",
-		utils.ConstructQuery(query, fields), nil, issues)
+		utils.ConstructQuery(map[string]string{
+			"query": query,
+		}, fields), nil, issues)
 
 	if err != nil {
 		return nil, err
@@ -75,7 +77,7 @@ func (s *Service) CreateIssue(issue *Issue) (*IssueResult, error) {
 	result := new(IssueResult)
 
 	if err := s.client.Post("api/issues",
-		utils.ConstructQuery("", []string{"id", "$type", "numberInProject"}),
+		utils.ConstructQuery(nil, []string{"id", "$type", "numberInProject"}),
 		issue, nil, &result); err != nil {
 		return nil, err
 	}
@@ -87,7 +89,7 @@ func (s *Service) CommentIssue(issue *Issue, comment *IssueComment) (*IssueResul
 	result := new(IssueResult)
 
 	if err := s.client.Post(fmt.Sprintf("api/issues/%s/comments", issue.Id),
-		utils.ConstructQuery("", []string{"id", "$type", "numberInProject"}),
+		utils.ConstructQuery(nil, []string{"id", "$type", "numberInProject"}),
 		comment, nil, &result); err != nil {
 		return nil, err
 	}
