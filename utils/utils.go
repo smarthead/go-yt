@@ -2,11 +2,9 @@ package utils
 
 import "strings"
 
-func ConstructQuery(query string, fields []string) map[string]string {
-	queryValues := make(map[string]string)
-
-	if len(query) > 0 {
-		queryValues["query"] = query
+func ConstructQuery(queryValues map[string]string, fields []string) map[string]string {
+	if queryValues == nil {
+		queryValues = make(map[string]string)
 	}
 
 	if fields != nil && len(fields) > 0 {
