@@ -27,7 +27,9 @@ func NewProjectsService(client *rest.Client) *Service {
 func (s *Service) GetProjects(query string, fields ...string) (*[]Project, error) {
 	projects := new([]Project)
 
-	err := s.client.Get("api/admin/projects", utils.ConstructQuery(query, fields), nil, projects)
+	err := s.client.Get("api/admin/projects", utils.ConstructQuery(map[string]string{
+		"query": query,
+	}, fields), nil, projects)
 
 	if err != nil {
 		return nil, err
@@ -39,7 +41,7 @@ func (s *Service) GetProjects(query string, fields ...string) (*[]Project, error
 func (s *Service) GetProjectById(projectId string, fields ...string) (*Project, error) {
 	project := new(Project)
 
-	err := s.client.Get("api/admin/projects/"+projectId, utils.ConstructQuery("", fields), nil, project)
+	err := s.client.Get("api/admin/projects/"+projectId, utils.ConstructQuery(nil, fields), nil, project)
 
 	if err != nil {
 		return nil, err
